@@ -6,10 +6,12 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'username', 'nama_lengkap', 'email', 'password'])]
+#[Fillable(['name', 'username', 'nama_lengkap', 'email', 'password', 'role_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -24,8 +26,33 @@ class User extends Authenticatable
         ];
     }
 
-    public function getAuthIdentifierName(): string
+    public function role(): BelongsTo
     {
-        return 'id';
+        return $this->belongsTo(Role::class);
+    }
+
+    public function anggota(): BelongsToMany
+    {
+        return $this->belongsToMany(Anggota::class, 'anggota_user');
+    }
+
+    public function isSuperadmin(): bool
+    {
+        return $this->role?->kode === 'superadmin';
+    }
+
+    public function isSekre(): bool
+    {
+        return $this->role && str_starts_with($this->role->kode, 'sekre_');
+    }
+
+    public function isKa(): bool
+    {
+        return $this->role && str_starts_with($this->role->kode, 'ka_');
+    }
+
+    public function canManageAnggota(): bool
+    {
+        return $this->isSuperadmin() || $this->isSekre();
     }
 }

@@ -1,0 +1,43 @@
+<?php $__env->startSection('title', 'Master Role'); ?>
+
+<?php $__env->startSection('content'); ?>
+<div class="card">
+    <div class="card-header">
+        <h2>Master Role</h2>
+        <span class="readonly-badge"><?php echo e($roles->sum('users_count')); ?> user terdaftar</span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:60px">ID</th>
+                <th style="width:140px">Kode</th>
+                <th style="width:160px">Nama</th>
+                <th>Keterangan</th>
+                <th style="width:100px">Jml User</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $__empty_1 = true; $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo e($role->id); ?></td>
+                    <td>
+                        <?php if($role->kode === 'superadmin'): ?>
+                            <span class="badge badge-superadmin"><?php echo e($role->kode); ?></span>
+                        <?php elseif($role->isSekre()): ?>
+                            <span class="badge badge-sekre"><?php echo e($role->kode); ?></span>
+                        <?php elseif($role->isKa()): ?>
+                            <span class="badge badge-ka"><?php echo e($role->kode); ?></span>
+                        <?php else: ?>
+                            <span class="badge"><?php echo e($role->kode); ?></span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo e($role->nama); ?></td>
+                    <td><?php echo e($role->keterangan ?: '-'); ?></td>
+                    <td><?php echo e($role->users_count); ?></td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
