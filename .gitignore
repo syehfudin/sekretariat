@@ -1,0 +1,23 @@
+# Environment & secrets
+.env
+src/.env
+*.key
+
+# Laravel
+src/vendor/
+src/node_modules/
+src/storage/*.key
+src/storage/app/private/*
+!src/storage/app/private/.gitignore
+src/storage/logs/*
+!src/storage/logs/.gitignore
+src/bootstrap/cache/*.php
+
+# Backups
+backups/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
